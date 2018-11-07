@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"net/url"
 
-	"github.com/RocketChat/Rocket.Chat.Go.SDK/models"
+	"github.com/msnoigrs/gorocketchat/models"
 )
 
 type ChannelsResponse struct {
@@ -55,8 +55,14 @@ func (c *Client) LeaveChannel(channel *models.Channel) error {
 //
 // https://rocket.chat/docs/developer-guides/rest-api/channels/info
 func (c *Client) GetChannelInfo(channel *models.Channel) (*models.Channel, error) {
+	values := url.Values{}
+	if channel.ID != "" {
+		values.Add("roomId", channel.ID)
+	} else if channel.Name != "" {
+		values.Add("roomName", channel.Name)
+	}
 	response := new(ChannelResponse)
-	if err := c.Get("channels.info", url.Values{"roomId": []string{channel.ID}}, response); err != nil {
+	if err := c.Get("channels.info", values, response); err != nil {
 		return nil, err
 	}
 

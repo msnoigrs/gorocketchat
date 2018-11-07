@@ -7,7 +7,7 @@ type Message struct {
 	RoomID   string `json:"rid"`
 	Msg      string `json:"msg"`
 	EditedBy string `json:"editedBy,omitempty"`
-
+	ParseUrls bool `json:"parseUrls,omitempty"`
 	Groupable bool `json:"groupable,omitempty"`
 
 	EditedAt  *time.Time `json:"editedAt,omitempty"`
@@ -31,7 +31,7 @@ type PostMessage struct {
 	RoomID      string       `json:"roomId,omitempty"`
 	Channel     string       `json:"channel,omitempty"`
 	Text        string       `json:"text,omitempty"`
-	ParseUrls   bool         `json:"parseUrls,omitempty"`
+	// ParseUrls   bool         `json:"parseUrls,omitempty"`
 	Alias       string       `json:"alias,omitempty"`
 	Emoji       string       `json:"emoji,omitempty"`
 	Avatar      string       `json:"avatar,omitempty"`

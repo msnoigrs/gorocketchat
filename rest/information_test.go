@@ -4,7 +4,7 @@ import (
 	"net/url"
 	"testing"
 
-	"github.com/RocketChat/Rocket.Chat.Go.SDK/common_testing"
+	"github.com/msnoigrs/gorocketchat/common_testing"
 	"github.com/stretchr/testify/assert"
 )
 

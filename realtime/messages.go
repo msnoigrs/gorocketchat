@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/Jeffail/gabs"
-	"github.com/RocketChat/Rocket.Chat.Go.SDK/models"
+	"github.com/msnoigrs/gorocketchat/models"
 	"github.com/gopackage/ddp"
 )
 
@@ -195,8 +195,16 @@ func getMessageFromData(data interface{}) *models.Message {
 }
 
 func getMessageFromDocument(arg *gabs.Container) *models.Message {
+	var updatedAt *time.Time
+	date := stringOrZero(arg.Path("_updatedAt.$date").Data())
+	if len(date) > 0 {
+		if ti, err := strconv.ParseFloat(date, 64); err == nil {
+			t := time.Unix(int64(ti)/1e3, int64(ti)%1e3)
+			updatedAt = &t
+		}
+	}
 	var ts *time.Time
-	date := stringOrZero(arg.Path("ts.$date").Data())
+	date = stringOrZero(arg.Path("ts.$date").Data())
 	if len(date) > 0 {
 		if ti, err := strconv.ParseFloat(date, 64); err == nil {
 			t := time.Unix(int64(ti)/1e3, int64(ti)%1e3)
@@ -208,8 +216,10 @@ func getMessageFromDocument(arg *gabs.Container) *models.Message {
 		RoomID:    stringOrZero(arg.Path("rid").Data()),
 		Msg:       stringOrZero(arg.Path("msg").Data()),
 		Timestamp: ts,
+		UpdatedAt: updatedAt,
 		User: &models.User{
 			ID:       stringOrZero(arg.Path("u._id").Data()),
+			Name:     stringOrZero(arg.Path("u.name").Data()),
 			UserName: stringOrZero(arg.Path("u.username").Data()),
 		},
 	}

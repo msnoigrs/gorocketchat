@@ -2,9 +2,9 @@ package rest
 
 import (
 	"bytes"
-	"net/url"
+	"encoding/json"
 
-	"github.com/RocketChat/Rocket.Chat.Go.SDK/models"
+	"github.com/msnoigrs/gorocketchat/models"
 )
 
 type logoutResponse struct {
@@ -36,8 +36,15 @@ func (c *Client) Login(credentials *models.UserCredentials) error {
 	}
 
 	response := new(logonResponse)
-	data := url.Values{"user": {credentials.Email}, "password": {credentials.Password}}
-	if err := c.Post("login", bytes.NewBufferString(data.Encode()), response); err != nil {
+	data := map[string]interface{} {
+		"user":credentials.Email,
+		"password":credentials.Password,
+	}
+	jsondata, err := json.Marshal(data)
+	if err != nil {
+		return err
+	}
+	if err := c.Post("login", bytes.NewBuffer(jsondata), response); err != nil {
 		return err
 	}
 
